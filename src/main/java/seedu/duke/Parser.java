@@ -46,10 +46,13 @@ public class Parser {
                 Income income = new Income(category, amount, description, date);
                 list.add(income);
                 ui.showMessage("Added: " + income);
-            } else {
+            } else if (Expense.VALID_CATEGORIES.contains(category.toLowerCase())) {
                 Expense expense = new Expense(category, amount, description, date);
                 list.add(expense);
                 ui.showMessage("Added: " + expense);
+            } else {
+                ui.showMessage("Invalid category '" + category + "'."
+                        + " Valid categories: " + Expense.VALID_CATEGORIES);
             }
         } catch (NumberFormatException e) {
             ui.showMessage("Invalid price.");
