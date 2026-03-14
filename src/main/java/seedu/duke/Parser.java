@@ -155,6 +155,9 @@ public class Parser {
      * @param ui    The ui instance to display results.
      */
     private void parseSummaryCommand(String input, TransactionList list, Ui ui) {
+        assert input != null;
+        assert list != null;
+
         String[] parts = input.split(" ", 2);
         String summaryType = parts.length > 1 ? parts[1].trim().toLowerCase() : "all";
 
