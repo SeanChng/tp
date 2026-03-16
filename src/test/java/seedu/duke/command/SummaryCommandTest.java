@@ -35,7 +35,6 @@ class SummaryCommandTest {
 
     @Test
     public void execute_summaryAll_printsCorrectTotals() throws MoneyBagProMaxException {
-        // 1. SETUP
         TransactionList list = new TransactionList();
         Ui ui = new Ui();
 
@@ -43,11 +42,9 @@ class SummaryCommandTest {
         list.add(new Expense("transport", 5.00, "bus", LocalDate.now()));
         list.add(new Income("salary", 25.50, "monthly", LocalDate.now()));
 
-        // 2. EXECUTE
         Command command = new SummaryCommand("all");
         command.execute(list, ui); // Execute directly!
 
-        // 3. ASSERT
         String expectedOutput = "===== Overall Summary =====" + System.lineSeparator() +
                 "Total Income: $25.50" + System.lineSeparator() +
                 "Total Expense: $15.50" + System.lineSeparator() +
