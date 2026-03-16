@@ -8,7 +8,6 @@ import seedu.duke.ui.Ui;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.text.ParseException;
 import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
