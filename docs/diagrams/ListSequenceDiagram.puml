@@ -1,0 +1,23 @@
+@startuml
+actor User
+participant Ui
+participant Parser
+participant ListCommand
+participant TransactionList
+
+User -> Ui : enter "list"
+Ui -> Parser : parse("list")
+Parser --> Ui : ListCommand
+Ui -> ListCommand : execute(list, ui)
+ListCommand -> TransactionList : isEmpty()
+
+alt list is empty
+    ListCommand -> Ui : showMessage("No transactions found.")
+else list not empty
+    loop for each transaction
+        ListCommand -> TransactionList : get(i)
+        TransactionList --> ListCommand : transaction
+        ListCommand -> Ui : showMessage(...)
+    end
+end
+@enduml

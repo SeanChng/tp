@@ -1,0 +1,20 @@
+@startuml
+actor User
+participant Ui
+participant Parser
+participant DeleteCommand
+participant TransactionList
+
+User -> Ui : enter "delete 2"
+Ui -> Parser : parse("delete 2")
+Parser --> Ui : DeleteCommand
+Ui -> DeleteCommand : execute(list, ui)
+
+alt valid index
+    DeleteCommand -> TransactionList : remove(index)
+    TransactionList --> DeleteCommand : removed transaction
+    DeleteCommand -> Ui : showMessage("Deleted: ...")
+else invalid index
+    DeleteCommand -> Ui : showMessage("Invalid index")
+end
+@enduml

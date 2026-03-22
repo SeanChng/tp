@@ -1,0 +1,40 @@
+@startuml
+class Parser {
+    +parse(input) : Command
+}
+
+abstract class Command {
+    +execute(list, ui)
+}
+
+class ListCommand {
+    +execute(list, ui)
+}
+
+class DeleteCommand {
+    -index : int
+    +execute(list, ui)
+}
+
+class TransactionList {
+    +add(t)
+    +get(i) : Transaction
+    +remove(i) : Transaction
+    +size() : int
+    +isEmpty() : boolean
+}
+
+class Transaction
+class Ui {
+    +readInput()
+    +showMessage(message)
+}
+
+Command <|-- ListCommand
+Command <|-- DeleteCommand
+Parser --> Command
+Command --> Ui
+ListCommand --> TransactionList
+DeleteCommand --> TransactionList
+TransactionList --> Transaction
+@enduml
