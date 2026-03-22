@@ -3,6 +3,8 @@ package seedu.duke.transactionlist;
 import seedu.duke.transaction.Transaction;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -75,5 +77,18 @@ public class TransactionList {
         logger.info("Removing transaction at index: " + i);
         return transactions.remove(i);
     }
-    // todo contain/find
+
+    /**
+     * Returns a new list containing all transactions sorted by the given comparator.
+     * The original list order is not modified.
+     *
+     * @param comparator the comparator to determine sort order
+     * @return a new sorted list of transactions
+     */
+    public List<Transaction> getSortedList(Comparator<Transaction> comparator) {
+        assert comparator != null : "Comparator should not be null";
+        ArrayList<Transaction> sorted = new ArrayList<>(transactions);
+        sorted.sort(comparator);
+        return sorted;
+    }
 }

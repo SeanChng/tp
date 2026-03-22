@@ -9,6 +9,7 @@ import seedu.duke.command.ListCommand;
 import seedu.duke.command.SummaryCommand;
 import seedu.duke.command.HelpCommand;
 import seedu.duke.command.FindCommand;
+import seedu.duke.command.SortCommand;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -51,6 +52,8 @@ public class Parser {
                 throw new MoneyBagProMaxException("Please provide a keyword to search for.");
             }
             return new FindCommand(arguments);
+        case "sort":
+            return parseSortCommand(arguments);
         default:
             throw new MoneyBagProMaxException("Unknown command. Type `help` to see the list of available commands.");
         }
@@ -157,5 +160,27 @@ public class Parser {
         } catch (DateTimeParseException e) {
             throw new MoneyBagProMaxException("Invalid date format — expected yyyy-MM-dd. Using today's date.");
         }
+    }
+
+    /**
+     * Parses the arguments for the sort command.
+     * Validates the "by/" prefix and the sort criteria value.
+     *
+     * @param args the argument string after "sort", e.g. "by/date"
+     * @return a new SortCommand with the parsed criteria
+     * @throws MoneyBagProMaxException if the format or criteria is invalid
+     */
+    private Command parseSortCommand(String args) throws MoneyBagProMaxException {
+        String sortPrefix = "by/";
+        if (args.isEmpty() || !args.startsWith(sortPrefix)) {
+            throw new MoneyBagProMaxException(
+                    "Invalid format. Use: sort by/date, sort by/amount, or sort by/category");
+        }
+        String sortBy = args.substring(sortPrefix.length()).trim().toLowerCase();
+        if (!sortBy.equals("date") && !sortBy.equals("amount") && !sortBy.equals("category")) {
+            throw new MoneyBagProMaxException(
+                    "Invalid sort criteria. Use: sort by/date, sort by/amount, or sort by/category");
+        }
+        return new SortCommand(sortBy);
     }
 }

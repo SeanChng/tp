@@ -41,10 +41,14 @@ public class Ui {
                                  - Shows overall totals or specific category totals.
                                  - Valid types: `all`, `expense`, `income`, or specific categories.
                                  - Example: summary all
-                6. Delete      : `delete [ENTRY INDEX]`
+                6. Sort        : `sort by/[CRITERIA]`
+                                 - Sorts and displays transactions by the given criteria.
+                                 - Valid criteria: `date`, `amount`, `category`
+                                 - Example: sort by/date
+                7. Delete      : `delete [ENTRY INDEX]`
                                  - Deletes a transaction using its number from the `list`.
                                  - Example: delete 3
-                7. Exit        : `exit`
+                8. Exit        : `exit`
                                  - Exits the program.
                 %s""".formatted(separator, separator, separator);
 
