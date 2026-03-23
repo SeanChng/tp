@@ -10,7 +10,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -21,6 +25,7 @@ public class Storage {
     private static final String DATA_FILE = "data/transactions.txt";
 
     private static final String TXN_PREFIX = "[TXN]";
+    private static final String FIELD_SEP  = " | ";
     private static final String KV_SEP     = "=";
 
 
@@ -74,5 +79,36 @@ public class Storage {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    /**
+     * Atomically flushes TransactionList to disk.
+     * Call after every mutating command (CRUD).
+     */
+    public void save(TransactionList list) throws MoneyBagProMaxException {
+        try {
+            Files.createDirectories(Paths.get(DATA_DIR));
+            List<String> lines = new ArrayList<>();
+            for (int i = 0; i < list.size(); i++)
+                lines.add(serializeLine(list.get(i)));
+
+            Path target = Paths.get(DATA_FILE);
+            Path tmp    = Paths.get(DATA_FILE + ".tmp");
+            Files.write(tmp, lines);
+            Files.move(tmp, target, StandardCopyOption.REPLACE_EXISTING,
+                       StandardCopyOption.ATOMIC_MOVE);
+        } catch (IOException e) {
+            throw new MoneyBagProMaxException("Failed to save data: " + e.getMessage());
+        }
+    }
+
+    private String serializeLine(Transaction t) {
+        return TXN_PREFIX + " " + String.join(FIELD_SEP,
+                                              "type"        + KV_SEP + t.getType(),
+                                              "category"    + KV_SEP + t.getCategory(),
+                                              "amount"      + KV_SEP + t.getAmount(),
+                                              "description" + KV_SEP + t.getDescription(),
+                                              "date"        + KV_SEP + t.getDate()
+        );
     }
 }
