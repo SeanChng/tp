@@ -207,8 +207,12 @@ public class TransactionList {
             }
         }
 
-        if (secondHalf > firstHalf) return "Increasing";
-        if (secondHalf < firstHalf) return "Decreasing";
+        if (secondHalf > firstHalf) {
+            return "Increasing";
+        }
+        if (secondHalf < firstHalf) {
+            return "Decreasing";
+        }
         return "Stable";
     }
 
