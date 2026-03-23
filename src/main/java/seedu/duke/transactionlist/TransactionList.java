@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.time.YearMonth;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *  Manages the list of transactions stored in the program.
@@ -111,44 +113,36 @@ public class TransactionList {
         return sorted;
     }
 
-    public Transaction getHighestExpense() {
-        Transaction highest = null;
+    private Transaction getExtremeTransaction(String type, boolean findMax) {
+        Transaction result = null;
         for (Transaction t : transactions) {
-            if (t.getType().equals("expense")) {
-                if (highest == null || t.getAmount() > highest.getAmount()) {
-                    highest = t;
+            if (t.getType().equals(type)) {
+                if (result == null) {
+                    result = t;
+                } else if (findMax && t.getAmount() > result.getAmount()) {
+                    result = t;
+                } else if (!findMax && t.getAmount() < result.getAmount()) {
+                    result = t;
                 }
             }
         }
-        return highest;
+        return result;
+    }
+
+    public Transaction getHighestExpense() {
+        return getExtremeTransaction("expense", true);
     }
 
     public Transaction getLowestExpense() {
-        Transaction lowest = null;
-        for (Transaction t : transactions) {
-            if (t.getType().equals("expense")) {
-                if (lowest == null || t.getAmount() < lowest.getAmount()) {
-                    lowest = t;
-                }
-            }
-        }
-        return lowest;
+        return getExtremeTransaction("expense", false);
     }
 
     public Transaction getHighestIncome() {
-        Transaction highest = null;
-        for (Transaction t : transactions) {
-            if (t.getType().equals("income")) {
-                if (highest == null || t.getAmount() > highest.getAmount()) {
-                    highest = t;
-                }
-            }
-        }
-        return highest;
+        return getExtremeTransaction("income", true);
     }
 
     public String getMostFrequentCategory() {
-        java.util.HashMap<String, Integer> map = new java.util.HashMap<>();
+        Map<String, Integer> map = new HashMap<>();
         for (Transaction t : transactions) {
             if (t.getType().equals("expense")) {
                 String cat = t.getCategory();
@@ -166,9 +160,9 @@ public class TransactionList {
         return mostFreq;
     }
 
-    public java.util.HashMap<String, Double> getAverageSpendingPerCategory() {
-        java.util.HashMap<String, Double> totalMap = new java.util.HashMap<>();
-        java.util.HashMap<String, Integer> countMap = new java.util.HashMap<>();
+    public HashMap<String, Double> getAverageSpendingPerCategory() {
+        Map<String, Double> totalMap = new HashMap<>();
+        Map<String, Integer> countMap = new HashMap<>();
 
         for (Transaction t : transactions) {
             if (t.getType().equals("expense")) {
@@ -178,7 +172,7 @@ public class TransactionList {
             }
         }
 
-        java.util.HashMap<String, Double> avgMap = new java.util.HashMap<>();
+        HashMap<String, Double> avgMap = new HashMap<>();
         for (String cat : totalMap.keySet()) {
             avgMap.put(cat, totalMap.get(cat) / countMap.get(cat));
         }
@@ -191,29 +185,30 @@ public class TransactionList {
             return "Not enough data";
         }
 
-        int mid = transactions.size() / 2;
-        double firstHalf = 0;
-        double secondHalf = 0;
+        double earlier = 0;
+        double later = 0;
 
-        for (int i = 0; i < mid; i++) {
-            if (transactions.get(i).getType().equals("expense")) {
-                firstHalf += transactions.get(i).getAmount();
+        YearMonth firstMonth = YearMonth.from(transactions.get(0).getDate());
+        YearMonth lastMonth = YearMonth.from(transactions.get(transactions.size() - 1).getDate());
+
+        for (Transaction t : transactions) {
+            if (t.getType().equals("expense")) {
+                YearMonth tMonth = YearMonth.from(t.getDate());
+                if (tMonth.equals(firstMonth)) {
+                    earlier += t.getAmount();
+                } else if (tMonth.equals(lastMonth)) {
+                    later += t.getAmount();
+                }
             }
         }
 
-        for (int i = mid; i < transactions.size(); i++) {
-            if (transactions.get(i).getType().equals("expense")) {
-                secondHalf += transactions.get(i).getAmount();
-            }
-        }
-
-        if (secondHalf > firstHalf) {
+        if (later > earlier) {
             return "Increasing";
-        }
-        if (secondHalf < firstHalf) {
+        } else if (later < earlier) {
             return "Decreasing";
+        } else {
+            return "Stable";
         }
-        return "Stable";
     }
 
     public double getTotalExpenses() {
