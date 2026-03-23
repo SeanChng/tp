@@ -1,0 +1,17 @@
+@startuml
+package "MoneyBagProMax" {
+    [User]
+    [Ui]
+    [Parser]
+    [Command]
+    [TransactionList]
+    [Storage]
+
+    User --> Ui
+    Ui --> Parser
+    Parser --> Command
+    Command --> TransactionList
+    TransactionList --> Storage
+    Command --> Ui
+}
+@enduml

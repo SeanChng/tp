@@ -51,19 +51,19 @@ class TransactionTest {
 
     @Test
     public void getAmount_incomeWithPositiveValue_returnsCorrectAmount() {
-        Income income = new Income("income", 500.00, "salary", LocalDate.now());
+        Income income = new Income("salary", 500.00, "monthly pay", LocalDate.now());
         assertEquals(500.00, income.getAmount(), 0.001);
     }
 
     @Test
     public void getType_income_returnsIncomeString() {
-        Income income = new Income("income", 100.00, "freelance", LocalDate.now());
+        Income income = new Income("freelance", 100.00, "project", LocalDate.now());
         assertEquals("income", income.getType());
     }
 
     @Test
     public void toString_incomeWithDescription_containsCategoryAndAmount() {
-        Income income = new Income("income", 1000.00, "monthly", LocalDate.of(2025, 3, 1));
+        Income income = new Income("salary", 1000.00, "monthly", LocalDate.of(2025, 3, 1));
         String result = income.toString();
         assertTrue(result.contains("[Income]"));
         assertTrue(result.contains("1000.00"));

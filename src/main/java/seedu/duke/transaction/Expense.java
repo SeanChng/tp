@@ -12,6 +12,10 @@ public class Expense extends Transaction {
     );
     
     private static final Logger logger = Logger.getLogger(Expense.class.getName());
+    // sets the logger to only trigger logger levels WARNING and SEVERE to reduce clutter
+    static {
+        logger.setLevel(Level.WARNING);
+    }
     
     public Expense(String category, double amount, String description, LocalDate date) {
         super(category, amount, description, date);
@@ -21,17 +25,11 @@ public class Expense extends Transaction {
     }
 
     public Expense(String category, double amount, String description) {
-        super(category, amount, description);
-        assert VALID_CATEGORIES.contains(category) : "Expense category must be one of: " + VALID_CATEGORIES;
-        logger.log(Level.INFO, "Created Expense — category: {0}, amount: {1}, description: \"{2}\", date: today ({3})",
-                new Object[]{category, amount, description, LocalDate.now()});
+        this(category, amount, description, LocalDate.now());
     }
 
     public Expense(String category, double amount) {
-        super(category, amount);
-        assert VALID_CATEGORIES.contains(category) : "Expense category must be one of: " + VALID_CATEGORIES;
-        logger.log(Level.INFO, "Created Expense — category: {0}, amount: {1}, no description, date: today ({2})",
-                new Object[]{category, amount, LocalDate.now()});
+        this(category, amount, "", LocalDate.now());
     }
 
     @Override

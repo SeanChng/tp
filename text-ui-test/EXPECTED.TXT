@@ -1,41 +1,76 @@
+        .___.
+       /     \
+      |       |
+      `-.   .-`
+     /   \ /   \
+    |   $$$$$   |
+    |  $$$$$$$  |
+    |   $$$$$   |
+     \         /
+      `-------`
+____________________________________________________________
 Welcome to MoneyBagProMax, give us your money.
 Enter `help` to check the list of available commands.
+____________________________________________________________
+
 Enter a command: Added: [Expense] food $10.00 ({TODAY})
+
 Enter a command: Added: [Expense] food "lunch" $10.00 ({TODAY})
+
 Enter a command: Added: [Expense] food "lunch" $10.00 (2025-03-01)
+
 Enter a command: Added: [Expense] food $10.00 (2025-03-01)
+
 Enter a command: [ERROR!] Invalid date format — expected yyyy-MM-dd. Using today's date.
+
 Enter a command: [ERROR!] Invalid price.
+
 Enter a command: [ERROR!] Invalid price.
+
 Enter a command: [ERROR!] Invalid, try: add [category]/PRICE [desc/DESCRIPTION] [d/YYYY-MM-DD]
-Enter a command: 1. [Expense] food $10.00 ({TODAY})
+
+Enter a command: ____________________________________________________________
+1. [Expense] food $10.00 ({TODAY})
 2. [Expense] food "lunch" $10.00 ({TODAY})
 3. [Expense] food "lunch" $10.00 (2025-03-01)
 4. [Expense] food $10.00 (2025-03-01)
+____________________________________________________________
+
 Enter a command: ===== Overall Summary =====
 Total Income: $0.00
 Total Expense: $40.00
 Net Balance: $-40.00
 ===========================
+
 Enter a command: Deleted: [Expense] food $10.00 ({TODAY})
+
 Enter a command: Deleted: [Expense] food "lunch" $10.00 ({TODAY})
+
 Enter a command: Deleted: [Expense] food "lunch" $10.00 (2025-03-01)
+
 Enter a command: Deleted: [Expense] food $10.00 (2025-03-01)
+
 Enter a command: [ERROR!] Invalid transaction index. Please provide a number between 1 and 0.
+
 Enter a command: [ERROR!] Invalid transaction index. Please provide a number between 1 and 0.
+
 Enter a command: [ERROR!] Invalid, try: delete INDEX
+
 Enter a command: ============================================================
                   MoneyBagProMax Help Menu
 ============================================================
-1. Add Expense : `add [category]/PRICE [desc/DESCRIPTION] [d/YYYY-MM-DD]`
+1. Add Expense : `add [expense-category]/PRICE [desc/DESCRIPTION] [d/YYYY-MM-DD]`
                  - desc/ and d/ are optional.
                  - Date defaults to today if omitted.
                  - Valid categories: `food`, `transport`, `utilities`,
                    `education`, `rent`, `medical`, `misc`
                  - Example: add food/10 desc/lunch d/2025-03-01
-2. Add Income  : `add income/PRICE [desc/DESCRIPTION] [d/YYYY-MM-DD]`
+2. Add Income  : `add [income-category]/PRICE [desc/DESCRIPTION] [d/YYYY-MM-DD]`
                  - desc/ and d/ are optional.
-                 - Example: add income/500 desc/allowance
+                 - Date defaults to today if omitted.
+                 - Valid categories: `salary`, `freelance`, `investment`,
+                   `business`, `gift`, `misc`
+                 - Example: add salary/500 desc/allowance d/2026-03-01
 3. List        : `list`
                  - Lists all current transactions in your app.
 4. Find        : `find [KEYWORD]`
@@ -47,11 +82,21 @@ Enter a command: ============================================================
                  - Shows overall totals or specific category totals.
                  - Valid types: `all`, `expense`, `income`, or specific categories.
                  - Example: summary all
-6. Delete      : `delete [ENTRY INDEX]`
+6. Sort        : `sort by/[CRITERIA]`
+                 - Sorts and displays transactions by the given criteria.
+                 - Valid criteria: `date`, `amount`, `category`
+                 - Example: sort by/date
+7. Delete      : `delete [ENTRY INDEX]`
                  - Deletes a transaction using its number from the `list`.
                  - Example: delete 3
-7. Exit        : `exit`
+8. Undo        : `undo`
+                 - Reverses the last add or delete action.
+9. Redo        : `redo`
+                 - Re-applies the last undone action.
+10. Exit       : `exit`
                  - Exits the program.
 ============================================================
+
 Enter a command: [ERROR!] Unknown command. Type `help` to see the list of available commands.
+
 Enter a command: Goodbye. Thank you for investing in MoneyBagProMax.
