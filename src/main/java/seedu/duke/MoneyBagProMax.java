@@ -15,6 +15,10 @@ public class MoneyBagProMax {
      */
 
     private static final Logger logger = Logger.getLogger(MoneyBagProMax.class.getName());
+    // sets the logger to only trigger logger levels WARNING and SEVERE to reduce clutter
+    static {
+        logger.setLevel(Level.WARNING);
+    }
 
     public static void main(String[] args) {
         logger.info("Starting the MoneyBagProMax application...");

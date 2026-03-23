@@ -5,6 +5,7 @@ import seedu.duke.transaction.Transaction;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -15,6 +16,10 @@ import java.util.logging.Logger;
 public class TransactionList {
 
     private static final Logger logger = Logger.getLogger(TransactionList.class.getName());
+    // sets the logger to only trigger logger levels WARNING and SEVERE to reduce clutter
+    static {
+        logger.setLevel(Level.WARNING);
+    }
     private final ArrayList<Transaction> transactions = new ArrayList<>();
 
     /**
