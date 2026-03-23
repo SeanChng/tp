@@ -62,7 +62,19 @@ public class Ui {
                                  - Reverses the last add or delete action.
                 9. Redo        : `redo`
                                  - Re-applies the last undone action.
-                10. Exit       : `exit`
+                10. Budget     : `budget set [AMOUNT]` or `budget status`
+                                 - Sets the monthly budget or shows the current budget status.
+                                 - `budget set` stores the monthly spending limit.
+                                 - `budget status` shows budget, spent amount, remaining amount,
+                                   and progress bar.
+                                 - Example: budget set 1000
+                                 - Example: budget status
+                11. Stats      : `stats`
+                                 - Displays spending analytics for recorded transactions.
+                                 - Includes highest and lowest transaction, most frequent category,
+                                                   average spending per category, and spending trend.
+                                 - Example: stats
+                12. Exit       : `exit`
                                  - Exits the program.
                 %s""".formatted(separator, separator, separator);
 
