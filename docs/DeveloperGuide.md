@@ -112,6 +112,8 @@ Both commands adhere to the application's Command pattern structure. The diagram
 ### Future Improvements
 * **Time-Bound Summaries:** Upgrading the `summary` command to accept date parameters, allowing users to see summaries for specific months or weeks (e.g., `summary /from 2026-01-01 /to 2026-01-31`).
 
+---
+
 ## Income Class
 
 ### Overview
