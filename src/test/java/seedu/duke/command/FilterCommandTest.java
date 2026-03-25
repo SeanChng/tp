@@ -109,5 +109,4 @@ public class FilterCommandTest {
         assertTrue(outContent.toString().contains("No matching transactions found"));
         assertFalse(outContent.toString().contains("transaction(s)"));
     }
-
 }
