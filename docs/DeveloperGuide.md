@@ -151,6 +151,60 @@ However, using subclasses allows each type to define its own valid categories an
 ### Future Improvements
 - Allow user-defined custom categories beyond the fixed list.
 - Add support for recurring income entries (e.g. monthly salary auto-logged).
+
+---
+
+## Persistent Storage Feature
+
+### Overview
+The persistent storage feature allows transactions to be saved across sessions so that user data is not lost when the application exits.
+The `Storage` class is responsible for reading from and writing to a flat file (`data/transactions.txt`) on disk.
+It is invoked on startup to reload saved transactions, and after every mutating command to persist the latest state.
+
+### Architecture and Flow
+The `Storage` class operates independently of the command pipeline and is called directly by the main application loop.
+On startup, `Storage.load()` reads the data file line by line, parses each transaction record, and populates the `TransactionList`.
+After any command that modifies the list (add, delete, etc.), `Storage.save()` serializes the entire `TransactionList` back to disk atomically using a temporary file, replacing the previous file only once the write succeeds.
+
+### Sequence Diagram for Load
+![Storage Load Sequence Diagram](diagrams/StorageLoadSequenceDiagram.png)
+
+### Loading Transactions
+On startup, `load()` ensures the `data/` directory and `transactions.txt` file exist, creating them if necessary.
+It then reads all lines from the file, skipping any that do not begin with the `[TXN]` prefix.
+Each valid line is parsed by `parseLine()` into a key-value map of fields (`type`, `category`, `amount`, `description`, `date`).
+The appropriate `Transaction` subclass — either `Income` or `Expense` — is instantiated and added to the `TransactionList`.
+Malformed lines are skipped with a warning rather than halting the application, so a single corrupt entry does not prevent the rest of the data from loading.
+
+### Sequence Diagram for Save
+![Storage Save Sequence Diagram](diagrams/StorageSaveSequenceDiagram.png)
+
+### Saving Transactions
+`save()` serializes every transaction in the list into a pipe-delimited string via `serializeLine()`, producing lines of the form:
+```
+[TXN] | type=income | category=food | amount=12.5 | description=lunch | date=2026-03-25
+```
+The lines are first written to a temporary file (`transactions.txt.tmp`), which is then atomically moved to replace `transactions.txt`.
+This two-step write ensures that a crash or interruption during saving cannot corrupt the existing data file.
+
+### Class Diagram
+![Storage Class Diagram](diagrams/StorageClassDiagram.png)
+
+### Design Considerations
+The `Storage` class is decoupled from the command classes and interacts only with `TransactionList`, keeping concerns cleanly separated.
+Atomic saves via a temporary file were chosen to protect data integrity — a partial write leaves the previous file intact.
+The pipe-delimited `[TXN] | key=value` format is human-readable and easy to extend with new fields without breaking backward compatibility, since fields are parsed by name rather than by position.
+Assertions are used throughout to enforce preconditions such as non-null inputs and positive amounts, consistent with the defensive programming approach used elsewhere in the codebase.
+
+### Alternatives Considered
+One alternative was to use Java's `ObjectOutputStream` for binary serialization, which would require less parsing code.
+However, this produces opaque binary files that are difficult to inspect or repair manually, and are brittle across refactors that rename classes.
+Another alternative was a database such as SQLite, but this would introduce an external dependency disproportionate to the application's scope.
+The plain-text flat-file approach was chosen for its simplicity, transparency, and zero external dependencies.
+
+### Future Improvements
+Possible future improvements include supporting multiple save files or profiles, compressing the data file for large transaction histories, and adding a backup rotation strategy to retain recent snapshots in case of data corruption.
+
 ---
 
 ## Product scope
