@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 // structure of test names: methodToTest_input_expectedOutput
-class   ParserTest {
+class ParserTest {
 
     @Test
     public void parse_sortByDate_returnsSortCommand() throws MoneyBagProMaxException {
