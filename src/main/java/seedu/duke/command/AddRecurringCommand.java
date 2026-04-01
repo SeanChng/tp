@@ -1,6 +1,7 @@
 package seedu.duke.command;
 
 import seedu.duke.budget.Budget;
+import seedu.duke.category.CategoryManager;
 import seedu.duke.transaction.Expense;
 import seedu.duke.transaction.Frequency;
 import seedu.duke.transaction.Income;
@@ -41,8 +42,9 @@ public class AddRecurringCommand extends Command {
     public void execute(TransactionList list, Budget budget, Ui ui) {
         boolean validIncome = Income.VALID_CATEGORIES.contains(category.toLowerCase());
         boolean validExpense = Expense.VALID_CATEGORIES.contains(category.toLowerCase());
+        boolean validCustom = CategoryManager.getInstance().getCustomCategories().contains(category.toLowerCase());
 
-        if (!validIncome && !validExpense) {
+        if (!validIncome && !validExpense && !validCustom) {
             ui.showMessage("Invalid category '" + category + "'."
                     + " Valid expense categories: " + Expense.VALID_CATEGORIES
                     + " Valid income categories: " + Income.VALID_CATEGORIES);

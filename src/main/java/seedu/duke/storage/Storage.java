@@ -1,6 +1,7 @@
 package seedu.duke.storage;
 
 import seedu.duke.MoneyBagProMaxException;
+import seedu.duke.category.CategoryManager;
 import seedu.duke.transaction.Expense;
 import seedu.duke.transaction.Frequency;
 import seedu.duke.transaction.Income;
@@ -349,8 +350,10 @@ public class Storage {
                     if (category == null || amountStr == null || freqStr == null || startStr == null) {
                         continue;
                     }
-                    if (!Income.VALID_CATEGORIES.contains(category.toLowerCase())
-                            && !Expense.VALID_CATEGORIES.contains(category.toLowerCase())) {
+                    boolean knownCategory = Income.VALID_CATEGORIES.contains(category.toLowerCase())
+                            || Expense.VALID_CATEGORIES.contains(category.toLowerCase())
+                            || CategoryManager.getInstance().getCustomCategories().contains(category.toLowerCase());
+                    if (!knownCategory) {
                         System.out.println("[WARN] Skipping recurring line with invalid category '"
                                 + category + "': " + line);
                         continue;

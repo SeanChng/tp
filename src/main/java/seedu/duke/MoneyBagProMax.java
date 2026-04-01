@@ -9,6 +9,8 @@ import seedu.duke.transactionlist.RecurringTransactionList;
 import seedu.duke.transactionlist.TransactionList;
 import seedu.duke.ui.Ui;
 import seedu.duke.undoredo.UndoRedoManager;
+import seedu.duke.category.CategoryManager;
+
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,6 +31,7 @@ public class MoneyBagProMax {
         TransactionList list = new TransactionList();
         RecurringTransactionList recurringList = new RecurringTransactionList();
         Storage storage = new Storage();
+        CategoryManager.getInstance().load();
         storage.load(list);
         storage.loadRecurring(recurringList);
         UndoRedoManager undoRedoManager = new UndoRedoManager();
