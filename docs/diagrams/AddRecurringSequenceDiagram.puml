@@ -1,4 +1,8 @@
-@startuml
+@startuml AddRecurringSequenceDiagram
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 5
+skinparam sequenceParticipant underline
+
 actor User
 participant ":Ui" as Ui
 participant ":Parser" as Parser
@@ -7,18 +11,40 @@ participant ":RecurringTransactionList" as RecList
 
 User -> Ui : enter "add food/10 desc/lunch rec/daily"
 Ui -> Parser : parse("add food/10 desc/lunch rec/daily")
+activate Parser
 Parser -> Parser : parseAddCommand("food/10 desc/lunch rec/daily")
-note right of Parser : Detects rec/ suffix,\nextracts frequency "daily"
+activate Parser #LightGray
+note right of Parser : Detects rec/ suffix;\nextracts Frequency.DAILY
+Parser --> Parser : AddRecurringCommand
+deactivate Parser
 Parser --> Ui : AddRecurringCommand
+deactivate Parser
 
 Ui -> AddRec : execute(list, budget, ui)
+activate AddRec
+
+AddRec -> AddRec : validate category
+activate AddRec #LightGray
+note right of AddRec : Checks Income.VALID_CATEGORIES,\nExpense.VALID_CATEGORIES,\nand custom categories
+AddRec --> AddRec
+deactivate AddRec
 
 alt invalid category
     AddRec -> Ui : showMessage("Invalid category ...")
 else valid category
     create ":RecurringTransaction" as RT
     AddRec -> RT : <<create>>(category, amount, description, frequency, startDate)
+    activate RT
+    RT --> AddRec
+    deactivate RT
+
     AddRec -> RecList : add(rt)
+    activate RecList
+    RecList --> AddRec
+    deactivate RecList
+
     AddRec -> Ui : showMessage("Added recurring: ...")
 end
+
+deactivate AddRec
 @enduml
