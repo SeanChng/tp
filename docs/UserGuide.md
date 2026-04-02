@@ -74,12 +74,19 @@ Adds an expense by the given category, amount, optional description and optional
 > [!NOTE]
 > If the date is omitted, it defaults to today's date. If the description is omitted, the transaction is recorded without one.
 
-### Adding an Income: `add [income-category]`
-(// add description here)
+---
 
-**Format**:
+### Adding an Income: `add [income-category]`
+Adds an income transaction to your list.
+
+**Format**: `add [income-category]/PRICE [desc/DESCRIPTION] [d/YYYY-MM-DD]`
+**Valid income categories**: `salary`, `freelance`, `investment`, `business`, `gift`, `misc`
 
 **Examples**:
+- `add salary/500 desc/allowance d/2026-03-01` Adds a salary income of $500.00 described as *"allowance"* on 1st March 2026.
+- `add freelance/150` Adds a freelance income of $150.00 with today's date and no description.
+
+> [!NOTE] If the date is omitted, it defaults to today's date. If the description is omitted, the transaction is recorded without one.
 
 ---
 
@@ -92,7 +99,7 @@ Displays all recorded transactions in a numbered list.
 - `list` Displays all transactions currently stored in the application.
 
 > [!NOTE]
-> If there are no transactions recorded, the application will show an empty-list message instead.
+> If there are no transactions recorded, the application will show an empty list message instead.
 ---
 
 ### Finding a Transaction: `find`
@@ -168,9 +175,6 @@ All fields must be provided — the edit replaces the entire transaction, not in
 > [!NOTE]
 > Use `list` first to confirm the index of the transaction you want to edit. The edit can be reversed with `undo`.
 
-**Format**:
-
-**Examples**:
 ---
 
 ### Undoing an Action: `undo`
@@ -228,8 +232,7 @@ The statistics include:
 - spending trend
 - budget usage percentage
 
-**Format**:
-- `stats`
+**Format**: `stats`
 
 **Examples**:
 - `stats` Displays the full statistics summary for all recorded transactions.
@@ -281,11 +284,12 @@ Copies the internal data file to a location of your choice. Useful for backing u
 ---
 
 ### Exiting the Application: `exit`
-(// add description here)
+Exits the MoneyBagProMax application.
 
-**Format**:
+**Format**: `exit`
 
 **Examples**:
+- `exit` Closes the application.
 
 ---
 
@@ -302,7 +306,7 @@ Then, overwrite the generated data/transactions.txt file with the one from your 
 
 MoneyBagProMax automatically saves your task data in a text file located at `./data/transactions.txt`, relative to the directory where you run the program.
 
-> ⚠️**Caution:** Be cautious when editing the file directly, as there are guards against file corruption and improper formatting. Failure to pass these checks may cause errors or data loss when the application is next launched.
+> ⚠️ **Caution:** Be cautious when editing the file directly, as there are guards against file corruption and improper formatting. Failure to pass these checks may cause errors or data loss when the application is next launched.
 
 ---
 
