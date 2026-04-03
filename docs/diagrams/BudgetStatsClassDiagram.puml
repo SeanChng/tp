@@ -1,0 +1,56 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam style strictuml
+
+class Parser {
+  +parse(input) : Command
+}
+
+class "{abstract}\nCommand" as Command {
+  +execute(list : TransactionList, budget : Budget, ui : Ui)
+}
+
+class BudgetCommand {
+  -action : String
+  -amount : double
+  +execute(list : TransactionList, budget : Budget, ui : Ui)
+}
+
+class StatsCommand {
+  +execute(list : TransactionList, budget : Budget, ui : Ui)
+}
+
+class TransactionList {
+  +getTotalIncome()
+  +getTotalExpenses()
+  +getTotalExpensesForMonth(month)
+  +getHighestExpense()
+  +getLowestExpense()
+  +getHighestIncome()
+  +getMostFrequentCategory()
+  +getAverageSpendingPerCategory()
+  +getSpendingTrend()
+}
+
+class Budget {
+  -monthlyBudget : double
+  +setMonthlyBudget(amount : double)
+  +getMonthlyBudget()
+  +hasBudget()
+  +calculateRemaining(spent : double)
+  +calculatePercentageUsed(spent : double)
+}
+
+class Ui {
+  +showMessage(message : String)
+}
+
+Parser --> Command
+Command <|-- BudgetCommand
+Command <|-- StatsCommand
+BudgetCommand --> Budget
+BudgetCommand --> TransactionList
+StatsCommand --> TransactionList
+StatsCommand --> Budget
+Command --> Ui
+@enduml

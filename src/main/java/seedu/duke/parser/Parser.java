@@ -118,6 +118,7 @@ public class Parser {
     }
 
     private Command parseAddCommand(String args) throws MoneyBagProMaxException {
+        
         String[] parts = args.split("/", 2);
         if (parts.length < 2) {
             throw new MoneyBagProMaxException("Invalid, try: add [category]/PRICE [desc/DESCRIPTION] [d/YYYY-MM-DD]");
@@ -142,8 +143,9 @@ public class Parser {
             double amount = parseAmount(remainder);
             String description = parseDescription(remainder);
             LocalDate date = parseDate(remainder);
-
-            assert amount > 0 : "Parsed amount is not positive: " + amount;
+            if (amount <= 0) {
+                throw new MoneyBagProMaxException("Amount must be positive.");
+            }
             assert Double.isFinite(amount) : "Parsed amount is infinite or NaN: " + amount;
             assert !date.isBefore(LocalDate.of(1900, 1, 1)) :
                     "Parsed date is before year 1900, likely a typo: " + date;
@@ -302,6 +304,9 @@ public class Parser {
             String category = categoryAndRest[0].trim();
             String valueRemainder = categoryAndRest[1].trim();
             double amount = parseAmount(valueRemainder);
+            if (amount <= 0) {
+                throw new MoneyBagProMaxException("Amount must be positive.");
+            }
             String description = parseDescription(valueRemainder);
             LocalDate date = parseDate(valueRemainder);
             return new EditCommand(index, category, amount, description, date, undoRedoManager);
@@ -402,12 +407,20 @@ public class Parser {
             if (name.isEmpty()) {
                 throw new MoneyBagProMaxException("Usage: category add/NAME");
             }
+            if (!name.matches("[a-z0-9_-]+")) {
+                throw new MoneyBagProMaxException(
+                        "Category name must only contain letters, digits, hyphens, or underscores.");
+            }
             return new CategoryCommand("add", name);
         }
         if (args.startsWith("remove/")) {
             String name = args.substring("remove/".length()).trim().toLowerCase();
             if (name.isEmpty()) {
                 throw new MoneyBagProMaxException("Usage: category remove/NAME");
+            }
+            if (!name.matches("[a-z0-9_-]+")) {
+                throw new MoneyBagProMaxException(
+                        "Category name must only contain letters, digits, hyphens, or underscores.");
             }
             return new CategoryCommand("remove", name);
         }

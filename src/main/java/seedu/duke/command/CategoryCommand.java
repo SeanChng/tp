@@ -51,10 +51,21 @@ public class CategoryCommand extends Command {
         case "remove":
             if (Expense.VALID_CATEGORIES.contains(name)) {
                 ui.showMessage("Cannot remove built-in category '" + name + "'.");
-            } else if (cm.removeCustomCategory(name)) {
-                ui.showMessage("Custom category removed: " + name);
             } else {
-                ui.showMessage("Custom category '" + name + "' not found.");
+                boolean inUse = false;
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i).getCategory().equalsIgnoreCase(name)) {
+                        inUse = true;
+                        break;
+                    }
+                }
+                if (inUse) {
+                    ui.showMessage("Cannot remove '" + name + "': it is used by existing transactions.");
+                } else if (cm.removeCustomCategory(name)) {
+                    ui.showMessage("Custom category removed: " + name);
+                } else {
+                    ui.showMessage("Custom category '" + name + "' not found.");
+                }
             }
             break;
         case "list":
