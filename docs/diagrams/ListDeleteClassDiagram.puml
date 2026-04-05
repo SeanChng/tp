@@ -35,7 +35,9 @@ class Ui {
 Parser --> Command
 Command <|-- ListCommand
 Command <|-- DeleteCommand
-ListCommand --> TransactionList
-DeleteCommand --> TransactionList
-Command --> Ui
+
+Command --> Ui : 1
+ListCommand --> TransactionList : 1
+DeleteCommand --> TransactionList : 1
+TransactionList "1" --> "0..*" Transaction
 @enduml
