@@ -36,9 +36,9 @@ public class AddCommand extends Command {
     public void execute(TransactionList list, Budget budget, Ui ui) {
         Transaction transaction = null;
         if (Income.VALID_CATEGORIES.contains(category.toLowerCase())) {
-            transaction = new Income(category, amount, description, date);
+            transaction = new Income(category.toLowerCase(), amount, description, date);
         } else if (CategoryManager.getInstance().isValidExpenseCategory(category)) {
-            transaction = new Expense(category, amount, description, date);
+            transaction = new Expense(category.toLowerCase(), amount, description, date);
         }
 
         if (transaction != null) {

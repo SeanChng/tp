@@ -564,7 +564,6 @@ It extends the abstract `Transaction` class, alongside `Expense`, sharing common
 | `investment` | Returns from investments   |
 | `business`   | Business revenue           |
 | `gift`       | Monetary gifts received    |
-| `misc`       | Any other income           |
 
 Category validity is enforced via an assertion in the constructor, consistent with the defensive programming approach used elsewhere in the codebase.
 Logging is configured at `WARNING` level to reduce noise during normal operation.
