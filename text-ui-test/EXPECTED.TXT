@@ -50,9 +50,9 @@ Enter a command: Deleted: [Expense] food "lunch" $10.00 (2025-03-01)
 
 Enter a command: Deleted: [Expense] food $10.00 (2025-03-01)
 
-Enter a command: [ERROR!] Invalid transaction index. Please provide a number between 1 and 0.
+Enter a command: [ERROR!] There are no entries in the list to delete.
 
-Enter a command: [ERROR!] Invalid transaction index. Please provide a number between 1 and 0.
+Enter a command: [ERROR!] There are no entries in the list to delete.
 
 Enter a command: [ERROR!] Invalid, try: delete INDEX
 
