@@ -84,8 +84,14 @@ public class Parser {
         case "sort":
             return parseSortCommand(arguments);
         case "undo":
+            if (!arguments.isEmpty()) {
+                throw new MoneyBagProMaxException("undo does not take any arguments.");
+            }
             return new UndoCommand(undoRedoManager);
         case "redo":
+            if (!arguments.isEmpty()) {
+                throw new MoneyBagProMaxException("redo does not take any arguments.");
+            }
             return new RedoCommand(undoRedoManager);
         case "edit":
             return parseEditCommand(arguments);
