@@ -12,6 +12,7 @@ import seedu.duke.undoredo.UndoRedoManager;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DeleteCommandTest {
 
@@ -91,5 +92,17 @@ public class DeleteCommandTest {
         DeleteCommand command = new DeleteCommand(1, undoRedoManager);
 
         assertThrows(MoneyBagProMaxException.class, () -> command.execute(list, budget, ui));
+    }
+
+    @Test
+    void execute_emptyList_throwsEmptyListMessage() {
+        DeleteCommand command = new DeleteCommand(1, undoRedoManager);
+
+        MoneyBagProMaxException exception = assertThrows(
+                MoneyBagProMaxException.class,
+                () -> command.execute(list, budget, ui)
+        );
+
+        assertTrue(exception.getMessage().contains("There are no entries in the list to delete"));
     }
 }

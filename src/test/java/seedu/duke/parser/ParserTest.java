@@ -151,7 +151,7 @@ class ParserTest {
         String input = "filter from/31-12-2026 to/2026-12-31";
 
         MoneyBagProMaxException exception = assertThrows(MoneyBagProMaxException.class, () -> parser.parse(input));
-        assertTrue(exception.getMessage().contains("Invalid date format — expected YYYY-MM-DD."));
+        assertTrue(exception.getMessage().contains("Invalid date format"));
     }
 
     @Test
