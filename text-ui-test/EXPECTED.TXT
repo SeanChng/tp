@@ -21,7 +21,7 @@ Enter a command: Added: [Expense] food "lunch" $10.00 (2025-03-01)
 
 Enter a command: Added: [Expense] food $10.00 (2025-03-01)
 
-Enter a command: [ERROR!] Invalid date format — expected yyyy-MM-dd. Transaction not added.
+Enter a command: [ERROR!] Invalid date format - expected yyyy-MM-dd. Transaction not added.
 
 Enter a command: [ERROR!] Invalid price.
 

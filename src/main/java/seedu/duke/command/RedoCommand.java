@@ -37,7 +37,7 @@ public class RedoCommand extends Command {
             list.remove(action.getIndex());
             list.insert(action.getIndex(), action.getTransaction());
             ui.showMessage("Redo: Reapplied edit at position " + (action.getIndex() + 1)
-                    + " — restored " + action.getTransaction());
+                    + " - restored " + action.getTransaction());
             break;
         default:
             throw new MoneyBagProMaxException("Unknown action type.");
