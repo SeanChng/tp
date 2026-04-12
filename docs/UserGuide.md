@@ -8,8 +8,8 @@ manage budgets, and gain insights into your spending habits via a simple applica
 ## Table of Contents
 - [Quick Start](#quick-start)
 - [Features](#features)
-    - [Adding an Expense: `add [expense-category]`](#adding-an-expense-add-expense-category)
-    - [Adding an Income: `add [income-category]`](#adding-an-income-add-income-category)
+    - [Adding an Expense: `add EXPENSE_CATEGORY`](#adding-an-expense-add-expense_category)
+    - [Adding an Income: `add INCOME_CATEGORY`](#adding-an-income-add-income_category)
     - [Listing all Transactions: `list`](#listing-all-transactions-list)
     - [Finding a Transaction: `find`](#finding-a-transaction-find)
     - [Viewing a Summary: `summary`](#viewing-a-summary-summary)
@@ -66,7 +66,7 @@ respective system [here](https://www.oracle.com/java/technologies/javase/jdk17-a
 
 ---
 
-### Adding an Expense: `add [expense-category]`
+### Adding an Expense: `add EXPENSE_CATEGORY`
 Adds an expense by the given category, amount, optional description and optional date.
 
 **Format**: `add EXPENSE_CATEGORY/PRICE [desc/DESCRIPTION] [d/YYYY-MM-DD]`
@@ -88,10 +88,10 @@ For managing custom expense categories, see [Managing Custom Categories](#managi
 
 ---
 
-### Adding an Income: `add [income-category]`
+### Adding an Income: `add INCOME_CATEGORY`
 Adds an income transaction to your list.
 
-**Format**: `add [income-category]/PRICE [desc/DESCRIPTION] [d/YYYY-MM-DD]`
+**Format**: `add INCOME_CATEGORY/PRICE [desc/DESCRIPTION] [d/YYYY-MM-DD]`
 **Valid income categories**: `salary`, `freelance`, `investment`, `business`, `gift`
 
 **Examples**:
@@ -293,7 +293,7 @@ Creates a recurring transaction template. MoneyBagProMax will automatically gene
 - `d/YYYY-MM-DD` sets the start date; defaults to today if omitted
 - The category determines whether the entry is an expense or income (same valid categories as `add`)
 > [!NOTE]
-> For valid expense and income categories, see [Adding an Expense](#adding-an-expense-add-expense-category) and [Adding an Income](#adding-an-income-add-income-category).
+> For valid expense and income categories, see [Adding an Expense](#adding-an-expense-add-expense_category) and [Adding an Income](#adding-an-income-add-income_category).
 
 **Examples**:
 - `add food/10 desc/lunch rec/daily` — Creates a daily $10 lunch expense template starting today.
@@ -417,8 +417,8 @@ MoneyBagProMax automatically saves your transaction data in three text files, bo
 
 | Action                 | Format                                                                 | Example                                      |
 |------------------------|------------------------------------------------------------------------|----------------------------------------------|
-| **Add Expense**        | `add [expense-category]/PRICE [desc/DESCRIPTION] [d/YYYY-MM-DD]`       | `add food/10 desc/lunch d/2026-03-01`        |
-| **Add Income**         | `add [income-category]/PRICE [desc/DESCRIPTION] [d/YYYY-MM-DD]`        | `add salary/500 desc/allowance d/2026-03-01` |
+| **Add Expense**        | `add EXPENSE_CATEGORY/PRICE [desc/DESCRIPTION] [d/YYYY-MM-DD]`         | `add food/10 desc/lunch d/2026-03-01`        |
+| **Add Income**         | `add add INCOME_CATEGORY/PRICE [desc/DESCRIPTION] [d/YYYY-MM-DD]`      | `add salary/500 desc/allowance d/2026-03-01` |
 | **List**               | `list`                                                                 | —                                            |
 | **Find**               | `find KEYWORD`                                                         | `find lunch`                                 |
 | **Summary**            | `summary [TYPE] [month/YYYY-MM]`                                       | `summary all`                                |
