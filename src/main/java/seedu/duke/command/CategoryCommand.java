@@ -5,6 +5,7 @@ import seedu.duke.category.CategoryManager;
 import seedu.duke.transaction.Expense;
 import seedu.duke.transactionlist.TransactionList;
 import seedu.duke.ui.Ui;
+import seedu.duke.transaction.Income;
 
 /**
  * Handles the following list of commands:
@@ -69,7 +70,8 @@ public class CategoryCommand extends Command {
             }
             break;
         case "list":
-            ui.showMessage("Available expense categories: " + cm.getAllExpenseCategories());
+            ui.showMessage("Available income categories: " + Income.VALID_CATEGORIES
+                    + "\nAvailable expense categories: " + cm.getAllExpenseCategories());
             break;
         default:
             ui.showMessage("Unknown category action: " + action);

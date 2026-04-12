@@ -9,9 +9,11 @@ import seedu.duke.ui.Ui;
 import seedu.duke.undoredo.UndoRedoManager;
 import seedu.duke.category.CategoryManager;
 
+
 import java.time.LocalDate;
 
 public class AddCommand extends Command {
+    private static final double LARGE_AMOUNT_THRESHOLD = 1_000_000.0;
     private final String category;
     private final double amount;
     private final String description;
@@ -42,6 +44,13 @@ public class AddCommand extends Command {
         }
 
         if (transaction != null) {
+            if (transaction instanceof Income && amount > LARGE_AMOUNT_THRESHOLD) {
+                ui.showMessage(String.format(
+                        "Warning: Are you sure you earned $%.2f? Transaction added.", amount));
+            } else if (transaction instanceof Expense && amount > LARGE_AMOUNT_THRESHOLD) {
+                ui.showMessage(String.format(
+                        "Warning: Are you sure you spent $%.2f? Transaction added.", amount));
+            }
             list.add(transaction);
             undoRedoManager.recordAdd(transaction, list.size() - 1);
             ui.showMessage("Added: " + transaction);

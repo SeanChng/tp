@@ -21,7 +21,7 @@ Enter a command: Added: [Expense] food "lunch" $10.00 (2025-03-01)
 
 Enter a command: Added: [Expense] food $10.00 (2025-03-01)
 
-Enter a command: [ERROR!] Invalid date format — expected yyyy-MM-dd. Using today's date.
+Enter a command: [ERROR!] Invalid date format — expected yyyy-MM-dd. Transaction not added.
 
 Enter a command: [ERROR!] Invalid price.
 
@@ -69,7 +69,7 @@ Enter a command: ============================================================
                  - desc/ and d/ are optional.
                  - Date defaults to today if omitted.
                  - Valid categories: `salary`, `freelance`, `investment`,
-                   `business`, `gift`, `misc`
+                   `business`, `gift`
                  - Example: add salary/500 desc/allowance d/2026-03-01
 3. List        : `list`
                  - Lists all current transactions in your app.
