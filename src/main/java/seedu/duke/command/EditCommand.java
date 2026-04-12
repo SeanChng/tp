@@ -8,6 +8,8 @@ import seedu.duke.transaction.Transaction;
 import seedu.duke.transactionlist.TransactionList;
 import seedu.duke.ui.Ui;
 import seedu.duke.undoredo.UndoRedoManager;
+import seedu.duke.category.CategoryManager;
+
 
 import java.time.LocalDate;
 
@@ -66,9 +68,9 @@ public class EditCommand extends Command {
 
         Transaction newTransaction = null;
         if (Income.VALID_CATEGORIES.contains(category.toLowerCase())) {
-            newTransaction = new Income(category, amount, description, date);
-        } else if (Expense.VALID_CATEGORIES.contains(category.toLowerCase())) {
-            newTransaction = new Expense(category, amount, description, date);
+            newTransaction = new Income(category.toLowerCase(), amount, description, date);
+        } else if (CategoryManager.getInstance().isValidExpenseCategory(category)) {
+            newTransaction = new Expense(category.toLowerCase(), amount, description, date);
         }
 
         if (newTransaction == null) {

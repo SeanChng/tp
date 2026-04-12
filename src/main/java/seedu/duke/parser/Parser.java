@@ -26,6 +26,8 @@ import seedu.duke.command.StatsCommand;
 import seedu.duke.transaction.Frequency;
 import seedu.duke.transactionlist.RecurringTransactionList;
 import seedu.duke.undoredo.UndoRedoManager;
+import seedu.duke.transaction.Income;
+import seedu.duke.category.CategoryManager;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -136,7 +138,10 @@ public class Parser {
 
             assert !category.isEmpty() : "Category is blank after trimming in input: " + args;
             assert !remainder.isEmpty() : "Remainder after category slash is empty in input: " + args;
-
+            if (!Income.VALID_CATEGORIES.contains(category.toLowerCase())
+                    && !CategoryManager.getInstance().isValidExpenseCategory(category)) {
+                throw new MoneyBagProMaxException("Invalid category '" + category + "'.");
+            }
             if (remainder.contains(" rec/")) {
                 Frequency frequency = parseFrequency(remainder);
                 String cleanRemainder = remainder.replaceFirst(" rec/\\S+", "").trim();
@@ -149,10 +154,9 @@ public class Parser {
             double amount = parseAmount(remainder);
             String description = parseDescription(remainder);
             LocalDate date = parseDate(remainder);
-            if (amount <= 0) {
-                throw new MoneyBagProMaxException("Amount must be positive.");
+            if (amount < 0.01 || !Double.isFinite(amount)) {
+                throw new MoneyBagProMaxException("Amount must be a valid positive number.");
             }
-            assert Double.isFinite(amount) : "Parsed amount is infinite or NaN: " + amount;
             assert !date.isBefore(LocalDate.of(1900, 1, 1)) :
                     "Parsed date is before year 1900, likely a typo: " + date;
 
@@ -208,11 +212,11 @@ public class Parser {
         String amountToken = remainder;
         if (amountToken.contains(" desc/")) {
             amountToken = amountToken.substring(0, amountToken.indexOf(" desc/"));
-        } else if (amountToken.contains(" d/")) {
+        }
+        if (amountToken.contains(" d/")) {   // was: else if
             amountToken = amountToken.substring(0, amountToken.indexOf(" d/"));
         }
-        assert !amountToken.trim().isEmpty() : "Amount token is empty after stripping flags from: " + remainder;
-
+        assert !amountToken.trim().isEmpty() : "Amount token is empty: " + remainder;
         return Double.parseDouble(amountToken.trim());
     }
 
@@ -309,8 +313,12 @@ public class Parser {
         try {
             String category = categoryAndRest[0].trim();
             String valueRemainder = categoryAndRest[1].trim();
+            if (!Income.VALID_CATEGORIES.contains(category.toLowerCase())
+                    && !CategoryManager.getInstance().isValidExpenseCategory(category)) {
+                throw new MoneyBagProMaxException("Invalid category '" + category + "'.");
+            }
             double amount = parseAmount(valueRemainder);
-            if (amount <= 0) {
+            if (amount < 0.01 || !Double.isFinite(amount)) {
                 throw new MoneyBagProMaxException("Amount must be positive.");
             }
             String description = parseDescription(valueRemainder);

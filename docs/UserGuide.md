@@ -88,7 +88,7 @@ Adds an expense by the given category, amount, optional description and optional
 Adds an income transaction to your list.
 
 **Format**: `add [income-category]/PRICE [desc/DESCRIPTION] [d/YYYY-MM-DD]`
-**Valid income categories**: `salary`, `freelance`, `investment`, `business`, `gift`, `misc`
+**Valid income categories**: `salary`, `freelance`, `investment`, `business`, `gift`
 
 **Examples**:
 - `add salary/500 desc/allowance d/2026-03-01` Adds a salary income of $500.00 described as *"allowance"* on 1st March 2026.
