@@ -71,6 +71,10 @@ Adds an expense by the given category, amount, optional description and optional
 
 **Format**: `add EXPENSE_CATEGORY/PRICE [desc/DESCRIPTION] [d/YYYY-MM-DD]`
 
+**Valid expense categories**: `food`, `transport`, `utilities`, `education`, `rent`, `medical`, `misc`
+
+For managing custom expense categories, see [Managing Custom Categories](#managing-custom-categories-category).  
+
 **Examples**:
 - `add food/10` Adds a food expense of $10.00 with no description, dated today.
 - `add transport/3.50 desc/bus ride` Adds a transport expense of $3.50 with the description *"bus ride"*, dated today.

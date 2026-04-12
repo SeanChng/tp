@@ -38,7 +38,7 @@ public class Ui {
                                  - desc/ and d/ are optional.
                                  - Date defaults to today if omitted.
                                  - Valid categories: `salary`, `freelance`, `investment`,
-                                   `business`, `gift`, `misc`
+                                   `business`, `gift`
                                  - Example: add salary/500 desc/allowance d/2026-03-01
                 3. List        : `list`
                                  - Lists all current transactions in your app.
