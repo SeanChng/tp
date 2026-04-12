@@ -135,8 +135,144 @@ I contributed the following sections to the Developer Guide:
 
 ---
 
+### Beyond-Team Contributions
+- Reported 22 bugs during the Practical Exam (Dry Run) for another team's product.
+
+---
+
 ### Tools Used
 - Gradle for build automation
 - JUnit for unit testing
 - Checkstyle for code quality
 - GitHub for version control and pull request management
+
+---
+
+## Contributions to the User Guide — Extract
+
+The following is an extract from the User Guide for the Sort command, one of the sections I authored.
+
+---
+
+### Sorting Transactions: `sort`
+Displays transactions sorted by the specified criterion. The underlying list order is **not changed** — this is a display-only operation.
+
+**Format**: `sort by/CRITERIA`
+
+**Valid criteria:**
+- `date` — ascending (earliest first)
+- `amount` — descending (largest first)
+- `category` — alphabetical A–Z (case-insensitive)
+
+**Examples**:
+- `sort by/date` — shows all transactions from earliest to latest.
+- `sort by/amount` — shows all transactions from highest to lowest amount.
+- `sort by/category` — shows all transactions sorted alphabetically by category.
+
+> [!NOTE]
+> Sort does not change the indices used by `delete` and `edit`. Use `list` to see the original insertion order.
+
+---
+
+## Contributions to the Developer Guide — Extract
+
+The following is an extract from the Developer Guide for the Undo and Redo feature, one of the sections I authored.
+
+---
+
+## Undo and Redo Feature
+
+### Overview
+The `undo` and `redo` commands allow users to reverse and reapply the last mutating operation
+(add, delete, or edit). They provide a safety net against accidental changes. The feature uses
+a dual-stack pattern: an undo stack records performed actions and a redo stack records undone
+actions, enabling bidirectional navigation of the action history.
+
+### Architecture and Flow
+`UndoRedoManager` is instantiated once in `MoneyBagProMax` (the main class) and injected into
+the `Parser`. When a mutating command (`AddCommand`, `DeleteCommand`, `EditCommand`) executes,
+it calls the appropriate `record*()` method on `UndoRedoManager`, which pushes an `ActionPair`
+onto the undo stack and clears the redo stack. When the user types `undo`, the `Parser` creates
+an `UndoCommand` that holds a reference to the shared `UndoRedoManager`. During execution,
+`UndoCommand` pops the top action from the undo stack, pushes it onto the redo stack, and applies
+the inverse operation to `TransactionList`. `redo` works symmetrically.
+
+### Sequence Diagram for Undo Command
+The following diagram shows the full interaction when a user undoes a previous action.
+
+![Undo Sequence Diagram](../diagrams/UndoSequenceDiagram.png)
+
+### Sequence Diagram for Redo Command
+The following diagram shows the full interaction when a user redoes a previously undone action.
+
+![Redo Sequence Diagram](../diagrams/RedoSequenceDiagram.png)
+
+### Implementation Details
+- **Recording actions:** Each mutating command calls `recordAdd()`, `recordDelete()`, or
+  `recordEdit()` on `UndoRedoManager` after modifying the list. Each method creates an
+  `ActionPair` capturing the action type, the affected transaction(s), and the list index,
+  then clears the redo stack to invalidate any future redo history.
+- **ActionPair:** An inner static class of `UndoRedoManager` that stores:
+  - `ActionType`: enum (`ADD`, `DELETE`, `EDIT`)
+  - `transaction`: the transaction that was added/deleted, or the new version after an edit
+  - `oldTransaction`: the previous version before an edit (null for ADD and DELETE)
+  - `index`: the position in the list at the time the action was performed
+- **Undo logic:** `UndoCommand.execute()` calls `getUndoAction()`, which pops from the undo
+  stack and pushes onto the redo stack. The command then switches on the action type to perform
+  the inverse operation:
+  - `ADD` → `list.remove(index)` (removes the added transaction)
+  - `DELETE` → `list.insert(index, transaction)` (re-inserts the deleted transaction)
+  - `EDIT` → `list.remove(index)` then `list.insert(index, oldTransaction)` (restores
+    the pre-edit version)
+- **Redo logic:** `RedoCommand.execute()` calls `getRedoAction()`, which pops from the redo
+  stack and pushes onto the undo stack. The command then reapplies the original action:
+  - `ADD` → `list.insert(index, transaction)`
+  - `DELETE` → `list.remove(index)`
+  - `EDIT` → `list.remove(index)` then `list.insert(index, transaction)`
+- **Mutating flag:** Both `UndoCommand` and `RedoCommand` override `isMutating()` to return
+  `true`, which triggers auto-save to storage after execution.
+
+### Class Diagram
+![Undo Redo Class Diagram](../diagrams/UndoRedoClassDiagram.png)
+
+### Design Considerations
+- **Dual-stack delta vs. Memento pattern:** The Memento pattern stores a complete copy of the
+  entire `TransactionList` before each mutating action. While straightforward, this uses O(n)
+  memory per recorded action, where n is the list size. The dual-stack approach stores only the
+  delta, the action type, one or two transaction objects, and an index, using O(1) memory per
+  action. For a personal finance app where sessions may involve many operations, the delta approach
+  is more memory-efficient.
+- **Clearing the redo stack on new action:** When a new mutating action occurs after one or more
+  undoes, the redo stack is cleared. This follows the standard undo/redo contract used by text
+  editors: branching redo history (where redo could replay an action conflicting with newer
+  changes) is avoided by discarding the redo stack. The result is a linear, predictable history.
+- **Index-based reinsertion:** Storing the exact list index allows transactions to be restored to
+  their original position. This is correct because undo/redo is strictly LIFO, the most recent
+  action must be undone before earlier ones, which guarantees that stored indices remain valid
+  during sequential undo/redo sequences.
+- **Non-persistent history:** Undo/redo stacks are in-memory only and cleared on application
+  exit. Persisting them would require serializing `ActionPair` objects across sessions, with
+  the risk of stale references if the saved data file is modified externally. For a CLI app,
+  this complexity is disproportionate to the benefit.
+
+### Alternatives Considered
+- **Memento pattern (full state snapshots):** Store a complete copy of `TransactionList` before
+  each mutating action and restore the snapshot on undo. Advantage: simpler undo logic (just
+  swap the reference). Disadvantage: O(n) memory per action, and deep-copying `Transaction`
+  objects for every add/delete/edit is costly. Rejected due to memory overhead.
+- **Command pattern with per-command undo methods:** Add an `undo()` method to each command
+  class (e.g., `AddCommand.undo()` removes the added transaction). This couples undo logic
+  directly to each command class, spreading the responsibility across many files and making
+  it harder to add new commands. The chosen design centralises all undo/redo logic in
+  `UndoRedoManager` and two command classes.
+- **Single list with an index pointer:** Maintain one list of `ActionPair` objects with a
+  pointer that moves backward on undo and forward on redo. This is functionally equivalent to
+  the dual-stack approach but is less intuitive conceptually, the dual-stack model maps more
+  directly to the standard mental model of "undo history" and "redo history" as separate queues.
+
+### Future Improvements
+- Set a maximum undo history size (e.g., 50 actions) to bound memory usage in long sessions.
+- Persist undo/redo history to a separate file so it survives application restarts.
+- Add `undo N` syntax to undo multiple actions in a single command.
+- Add a `history` command to list available undo/redo operations so users can see what actions
+  are available before committing to an undo.
