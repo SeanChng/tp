@@ -13,12 +13,12 @@ import seedu.duke.category.CategoryManager;
 import java.time.LocalDate;
 
 public class AddCommand extends Command {
+    private static final double LARGE_AMOUNT_THRESHOLD = 1_000_000.0;
     private final String category;
     private final double amount;
     private final String description;
     private final LocalDate date;
     private final UndoRedoManager undoRedoManager;
-    private static final double LARGE_AMOUNT_THRESHOLD = 1_000_000.0;
 
     public AddCommand(String category, double amount, String description, LocalDate date,
                       UndoRedoManager undoRedoManager) {
