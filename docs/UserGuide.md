@@ -8,8 +8,8 @@ manage budgets, and gain insights into your spending habits via a simple applica
 ## Table of Contents
 - [Quick Start](#quick-start)
 - [Features](#features)
-    - [Adding an Expense: `add [expense-category]`](#adding-an-expense-add-expense-category)
-    - [Adding an Income: `add [income-category]`](#adding-an-income-add-income-category)
+    - [Adding an Expense: `add EXPENSE_CATEGORY`](#adding-an-expense-add-expense_category)
+    - [Adding an Income: `add INCOME_CATEGORY`](#adding-an-income-add-income_category)
     - [Listing all Transactions: `list`](#listing-all-transactions-list)
     - [Finding a Transaction: `find`](#finding-a-transaction-find)
     - [Viewing a Summary: `summary`](#viewing-a-summary-summary)
@@ -28,6 +28,7 @@ manage budgets, and gain insights into your spending habits via a simple applica
     - [Filtering Transactions: `filter`](#filtering-transactions-filter)
     - [Exporting to CSV: `export-csv`](#exporting-to-csv-export-csv)
     - [Exporting Data File: `export-data`](#exporting-data-file-export-data)
+    - [Viewing the Help list: `help`](#viewing-the-help-list-help)
     - [Exiting the Application: `exit`](#exiting-the-application-exit)
 - [Command Summary](#command-summary)
 
@@ -63,10 +64,11 @@ respective system [here](https://www.oracle.com/java/technologies/javase/jdk17-a
 > - **Dates** must follow the `YYYY-MM-DD` format (e.g. `2026-03-01`).
 > - **Prices** must be a positive number (e.g. `10` or `10.50`).
 > - If a date is omitted, it defaults to today's date.
+> - Command names are case-insensitive. (e.g ADD food/10 will be accepted by the program).
 
 ---
 
-### Adding an Expense: `add [expense-category]`
+### Adding an Expense: `add EXPENSE_CATEGORY`
 Adds an expense by the given category, amount, optional description and optional date.
 
 **Format**: `add EXPENSE_CATEGORY/PRICE [desc/DESCRIPTION] [d/YYYY-MM-DD]`
@@ -88,10 +90,10 @@ For managing custom expense categories, see [Managing Custom Categories](#managi
 
 ---
 
-### Adding an Income: `add [income-category]`
+### Adding an Income: `add INCOME_CATEGORY`
 Adds an income transaction to your list.
 
-**Format**: `add [income-category]/PRICE [desc/DESCRIPTION] [d/YYYY-MM-DD]`
+**Format**: `add INCOME_CATEGORY/PRICE [desc/DESCRIPTION] [d/YYYY-MM-DD]`
 **Valid income categories**: `salary`, `freelance`, `investment`, `business`, `gift`
 
 **Examples**:
@@ -127,7 +129,9 @@ Searches for transactions that contain a specific keyword in their category, des
 - `find 2026-03` Searches for all transactions from March 2026.
 
 > [NOTE]
-> If no transactions match your keyword, an empty result will be returned.
+> 1. If no transactions match your keyword, an empty result will be returned.
+> 2. In the results returned from the find command, the numbering of the items are based on the **actual** numbering 
+in the **original list index**.
 
 ---
 
@@ -139,7 +143,7 @@ Displays overall totals or specific category totals for your transactions.
 **Valid types**: `all`, `expense`, `income`, or any specific category (e.g. `food`, `salary`)
 
 **Examples**:
-- `summary all` Shows the total income, total expenses, and net balance.
+- `summary` or `summary all` Shows the total income, total expenses, and net balance.
 - `summary expense` Shows the total amount spent across all expense categories.
 - `summary food` Shows the total amount spent specifically on food.
 - `summary month/2026-03` Shows the total income, expenses, and net balance for that particular month.
@@ -347,7 +351,8 @@ Filters and displays only the transactions that fall within a specified date ran
 - `filter from/2026-01-01 to/2026-03-31` Displays all transactions from 1st January 2026 to 31st March 2026.
 
 > [NOTE]
-> Both `from/` and `to/` are compulsory.
+> 1. Both `from/` and `to/` are compulsory.
+> 2. The `from/` date **cannot be** after the `to/` date. The application will throw an error.
 
 ---
 
@@ -389,6 +394,17 @@ Copies the internal data file to a location of your choice. Useful for backing u
 
 > [NOTE]
 > The exported file can be used to restore your data on another device. See the [FAQ](#faq) for transfer instructions.
+
+---
+
+### Viewing the Help List: `help`
+Shows the various commands that are available to be used in the MoneyBagProMax application.
+Will also show the format of the various commands.
+
+**Format**: `help`
+
+**Examples**:
+- `help` Shows all available commands
 
 ---
 
@@ -454,14 +470,14 @@ Valid values: `frequency` must be `DAILY`, `WEEKLY`, or `MONTHLY`; use `null` fo
 
 | Action                 | Format                                                                 | Example                                      |
 |------------------------|------------------------------------------------------------------------|----------------------------------------------|
-| **Add Expense**        | `add [expense-category]/PRICE [desc/DESCRIPTION] [d/YYYY-MM-DD]`       | `add food/10 desc/lunch d/2025-03-01`        |
-| **Add Income**         | `add [income-category]/PRICE [desc/DESCRIPTION] [d/YYYY-MM-DD]`        | `add salary/500 desc/allowance d/2026-03-01` |
+| **Add Expense**        | `add EXPENSE_CATEGORY/PRICE [desc/DESCRIPTION] [d/YYYY-MM-DD]`         | `add food/10 desc/lunch d/2026-03-01`        |
+| **Add Income**         | `add add INCOME_CATEGORY/PRICE [desc/DESCRIPTION] [d/YYYY-MM-DD]`      | `add salary/500 desc/allowance d/2026-03-01` |
 | **List**               | `list`                                                                 | —                                            |
 | **Find**               | `find KEYWORD`                                                         | `find lunch`                                 |
 | **Summary**            | `summary [TYPE] [month/YYYY-MM]`                                       | `summary all`                                |
 | **Sort**               | `sort by/CRITERIA`                                                     | `sort by/date`                               |
 | **Delete**             | `delete ENTRY_INDEX`                                                   | `delete 3`                                   |
-| **Edit**               | `edit INDEX [category]/PRICE [desc/DESCRIPTION] [d/YYYY-MM-DD]`        | `edit 3 food/20 desc/dinner d/2026-03-20`    |
+| **Edit**               | `edit ENTRY_INDEX CATEGORY/PRICE [desc/DESCRIPTION] [d/YYYY-MM-DD]`    | `edit 3 food/20 desc/dinner d/2026-03-20`    |
 | **Undo**               | `undo`                                                                 | —                                            |
 | **Redo**               | `redo`                                                                 | —                                            |
 | **Budget Set**         | `budget set AMOUNT`                                                    | `budget set 1000`                            |
@@ -477,4 +493,5 @@ Valid values: `frequency` must be `DAILY`, `WEEKLY`, or `MONTHLY`; use `null` fo
 | **Filter**             | `filter from/YYYY-MM-DD to/YYYY-MM-DD`                                 | `filter from/2026-01-01 to/2026-03-31`       |
 | **Export CSV**         | `export-csv FILEPATH`                                                  | `export-csv ~/transactions.csv`              |
 | **Export Data**        | `export-data FILEPATH`                                                 | `export-data ~/backup/transactions.txt`      |
+| **Help**               | `help`                                                                 | —                                            |
 | **Exit**               | `exit`                                                                 | —                                            |

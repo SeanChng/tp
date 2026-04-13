@@ -9,11 +9,28 @@ This project builds on ideas and resources from the following sources:
 - **Java SE 17 Documentation**: [`java.time.LocalDate`](https://docs.oracle.com/en/java/se/17/docs/api/java.base/java/time/LocalDate.html) and [`java.util.logging`](https://docs.oracle.com/en/java/se/17/docs/api/java.logging/java/util/logging/package-summary.html) API references used throughout the codebase.
 - **[PlantUML](https://plantuml.com/)**: all UML sequence and class diagrams in this guide were generated using PlantUML.
 - **CS2113 Teaching Team, National University of Singapore**: the individual project (IP) phase of CS2113 provided the foundational scaffolding and iterative development process that each team member independently built upon before this team project (TP). Special thanks to the course instructors for the structured guidance throughout both phases.
+
+---
 # Design
 
 ## Architecture
 ![Architecture Diagram](diagrams/ArchitectureDiagram.png)
-(Overall system architecture diagram and explanation)
+
+Since MoneyBagProMax is a **classic layered CLI Architecture**, each component has a single, well-defined responsibility and data flows through them
+in one direction.
+- **Ui is the entry point for the user.** It owns all input collection and output rendering. 
+Rather than scattering print and input calls throughout the codebase, 
+everything the user ever sees or types goes through Ui.
+- **Parser sits immediately after Ui** and translates raw string input into a structured intent. 
+It doesn't know what a transaction is, it just knows how to read "add 50 lunch" and turn it into something the rest of the system can act on.
+- **Command is the brain of the application.** It receives the parsed instruction and decides what to do: validate it, call methods on TransactionList, and determine what response to hand back. 
+Command then calls back into Ui to render its result, allowing Command to drive what the user sees without Ui needing to know about the outcome in advance.
+- **TransactionList is your in-memory data model.** It holds the list of transactions for the current session and exposes operations on it.
+It just manages the data.
+- **Storage handles persistence through different sessions.** TransactionList delegates to it whenever the data needs to be saved or loaded, 
+keeping file I/O completely decoupled from the actual logic.
+
+---
 
 ## Components
 ### Parser
@@ -276,12 +293,13 @@ Possible future improvements include allowing deletion of multiple transactions 
 
 ---
 
-## Find and Summary Transaction Features
+## Find, Summary and Filter Transaction Features
 
 ### Overview
-The `find` and `summary` features allow users to draw meaningful insights from their recorded transactions.
-The `find` command locates specific transactions based on keyword matching, allowing users to search for distinct transactions or categories. 
-The `summary` command calculates and displays the overall statistics (e.g. total expense) for the user to see at a glance.
+The `find`, `summary` and `filter` features allow users to draw meaningful insights from their recorded transactions.
+- The `find` command locates specific transactions based on keyword matching, allowing users to search for distinct transactions or categories. 
+- The `summary` command calculates and displays the overall statistics (e.g. total expense) for the user to see at a glance.
+- The `filter` command only shows specific transactions in a specified time frame, allowing users to have a focused view of their transactions in a specified window.
 
 ### Architecture and Flow
 Similar to the broader application architecture, these features rely on the interaction between the `Parser`, `Command`, `TransactionList`, and `Ui` components.
@@ -306,10 +324,14 @@ It iterates through the entire `TransactionList`, categorising each entry as eit
 The following sequence diagram illustrates the interactions when a user wants to see a summary of their transactions.
 ![Summary Sequence Diagram](diagrams/SummarySequenceDiagram.png)
 
-### Class Diagram
-Both commands adhere to the application's Command pattern structure. The diagram below shows how `FindCommand` and `SummaryCommand` inherit from the abstract `Command` class and depend on `TransactionList` and `Ui`.
+#### Sequence Diagram for Filter Command
+The following sequence diagram illustrates the interactions when a user wants to filter their transactions within a period of 1 month.
+![Filter Sequence Diagram](diagrams/FilterSequenceDiagram.png)
 
-![Find and Summary Class Diagram](diagrams/FindSummaryClassDiagram.png)
+### Class Diagram
+Both commands adhere to the application's Command pattern structure. The diagram below shows how `FindCommand`, `SummaryCommand` and `FilterCommand` inherit from the abstract `Command` class and depend on `TransactionList` and `Ui`.
+
+![Find, Summary and Filter Class Diagram](diagrams/FindSummaryFilterClassDiagram.png)
 
 ### Design Considerations
 * **Case-Insensitive Searching:** For the `find` feature, it was decided that keyword matching should be case-insensitive (e.g., searching "food" returns "Food" and "FOOD"). This greatly enhances user experience, as users do not need to remember the exact capitalisation of their previous entries.
@@ -1139,7 +1161,7 @@ The following test cases cover the main features of MoneyBagProMax. Run them in 
 1. `undo` — expect the deleted salary transaction restored.
 2. `undo` — expect the edit from step 19 reversed (food/12.50 restored).
 3. `redo` — expect the edit reapplied.
-4. `redo` — expect the delete to be reapplied.
+4. `redo` — expect the delete command to be reapplied.
 5. `redo` — expect an error indicating no further redo history.
 
 #### Summary
