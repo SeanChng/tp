@@ -1,0 +1,49 @@
+@startuml
+hide circle
+skinparam classAttributeIconSize 0
+
+class "{abstract}\nCommand" as Command {
+  +execute(transactions: TransactionList, ui: Ui): void
+}
+
+class FindCommand {
+  -keyword: String
+  +execute(transactions: TransactionList, ui: Ui): void
+}
+
+class SummaryCommand {
+  -summaryType: String
+  -targetMonth: String
+  +execute(transactions: TransactionList, ui: Ui): void
+}
+
+class FilterCommand {
+  -from: LocalDate
+  -to: LocalDate
+  +execute(list: TransactionList, budget: Budget, ui: Ui): void
+}
+
+class TransactionList {
+  +findTransactions(keyword: String): ArrayList<Transaction>
+  +getTransactions(): ArrayList<Transaction>
+  +get(index: int): Transaction
+  +size(): int
+}
+
+class Ui {
+  +showTransactions(transactions: ArrayList<Transaction>): void
+  +showSummary(income: double, expense: double, net: double): void
+  +showMessage(message: String): void
+}
+
+Command <|-- FindCommand
+Command <|-- SummaryCommand
+Command <|-- FilterCommand
+FindCommand "1" ..> "1" TransactionList
+FindCommand "1" ..> "1" Ui
+SummaryCommand "1" ..> "1" TransactionList
+SummaryCommand "1" ..> "1" Ui
+FilterCommand "1" ..> "1" TransactionList
+FilterCommand "1" ..> "1" Ui
+
+@enduml

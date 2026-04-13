@@ -276,12 +276,13 @@ Possible future improvements include allowing deletion of multiple transactions 
 
 ---
 
-## Find and Summary Transaction Features
+## Find, Summary and Filter Transaction Features
 
 ### Overview
-The `find` and `summary` features allow users to draw meaningful insights from their recorded transactions.
-The `find` command locates specific transactions based on keyword matching, allowing users to search for distinct transactions or categories. 
-The `summary` command calculates and displays the overall statistics (e.g. total expense) for the user to see at a glance.
+The `find`, `summary` and `filter` features allow users to draw meaningful insights from their recorded transactions.
+- The `find` command locates specific transactions based on keyword matching, allowing users to search for distinct transactions or categories. 
+- The `summary` command calculates and displays the overall statistics (e.g. total expense) for the user to see at a glance.
+- The `filter` command only shows specific transactions in a specified time frame, allowing users to have a focused view of their transactions in a specified window.
 
 ### Architecture and Flow
 Similar to the broader application architecture, these features rely on the interaction between the `Parser`, `Command`, `TransactionList`, and `Ui` components.
@@ -306,10 +307,14 @@ It iterates through the entire `TransactionList`, categorising each entry as eit
 The following sequence diagram illustrates the interactions when a user wants to see a summary of their transactions.
 ![Summary Sequence Diagram](diagrams/SummarySequenceDiagram.png)
 
-### Class Diagram
-Both commands adhere to the application's Command pattern structure. The diagram below shows how `FindCommand` and `SummaryCommand` inherit from the abstract `Command` class and depend on `TransactionList` and `Ui`.
+#### Sequence Diagram for Filter Command
+The following sequence diagram illustrates the interactions when a user wants to filter their transactions within a period of 1 month.
+![Filter Sequence Diagram](diagrams/FilterSequenceDiagram.png)
 
-![Find and Summary Class Diagram](diagrams/FindSummaryClassDiagram.png)
+### Class Diagram
+Both commands adhere to the application's Command pattern structure. The diagram below shows how `FindCommand`, `SummaryCommand` and `FilterCommand` inherit from the abstract `Command` class and depend on `TransactionList` and `Ui`.
+
+![Find, Summary and Filter Class Diagram](diagrams/FindSummaryFilterClassDiagram.png)
 
 ### Design Considerations
 * **Case-Insensitive Searching:** For the `find` feature, it was decided that keyword matching should be case-insensitive (e.g., searching "food" returns "Food" and "FOOD"). This greatly enhances user experience, as users do not need to remember the exact capitalisation of their previous entries.
