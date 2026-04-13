@@ -210,6 +210,9 @@ public class Parser {
         assert descStart <= remainder.length() : "descStart index exceeds remainder length";
 
         String afterDesc = remainder.substring(descStart).trim();
+        if (afterDesc.contains(" rec/")) {
+            afterDesc = afterDesc.substring(0, afterDesc.indexOf(" rec/")).trim();
+        }
         if (afterDesc.contains(" d/")) {
             return afterDesc.substring(0, afterDesc.indexOf(" d/")).trim();
         }
