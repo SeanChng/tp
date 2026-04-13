@@ -34,17 +34,25 @@ The implementation required the use of data structures such as HashMap to calcul
 
 ---
 
-### Enhancements Implemented:
-- Implemented the List Command to display all transactions.
-- Implemented the Delete Command to remove transactions by index.
-- Refactored duplicated code in TransactionList by introducing a helper method to compute highest and lowest transactions.
-- Added defensive programming using assertions and logging.
-- Wrote JUnit tests for multiple commands including DeleteCommand, ListCommand, BudgetCommand, StatsCommand, HelpCommand, and ExitCommand.
+### Enhancements implemented
 
----
+- Budget Feature
+    - Implemented budget set and budget status
+    - Added budget tracking (remaining amount, percentage used)
+    - Implemented persistence using [BUDGET] format
+    - Added validation for invalid inputs (zero, negative, excessively large values)
+
+- Statistics Feature
+    - Implemented stats command to provide financial insights (totals, highest/lowest transactions, category analysis)
+    - Designed spending trend feature using month-based aggregation
+    - Ensured correctness by returning "Not enough data" when insufficient data is present
+
+- Core Command Improvements
+    - Enhanced delete command to handle empty list and invalid indices
+    - Improved error handling to prevent runtime exceptions
 
 ### Code Contributed
-[RepoSense link](https://nus-cs2113-ay2526-s2.github.io/tp-dashboard/?search=cedrictan24&breakdown=true&sort=groupTitle%20dsc&sortWithin=title&since=2026-02-20T00%3A00%3A00&timeframe=commit&mergegroup=&groupSelect=groupByRepos&checkedFileTypes=docs~functional-code~test-code~other&filteredFileName=)
+[Cedric's RepoSense](https://nus-cs2113-ay2526-s2.github.io/tp-dashboard/?search=cedrictan24&breakdown=true&sort=groupTitle%20dsc&sortWithin=title&since=2026-02-20T00%3A00%3A00&timeframe=commit&mergegroup=&groupSelect=groupByRepos&checkedFileTypes=docs~functional-code~test-code~other&filteredFileName=)
 
 ---
 
@@ -59,28 +67,42 @@ Each section includes the command format, examples, and explanations.
 
 ---
 
-### Contributions to the Developer Guide
-I contributed the following sections to the Developer Guide:
-- Implementation of the Budget feature
-- Implementation of the Statistics feature
-- Refactoring of TransactionList
-- Defensive programming (assertions and logging)
-- Sequence diagrams of the Budget feature
-- Sequence diagrams of the Statistics feature
+### Contributions to the Developer Guide (DG)
+
+- Added implementation details for:
+    - Budget feature (including persistence and validation)
+    - Statistics feature (including spending trend logic)
+
+- Documented design decisions such as:
+    - month-based aggregation for spending trend computation
+    - separation of concerns between StatsCommand and TransactionList
+
+- Updated documentation for core commands:
+    - delete command (index validation and empty list handling)
+    - list command (interaction with `TransactionList`)
+
+- Created and refined UML diagrams:
+    - sequence diagrams for command execution flow
+    - class diagrams for Budget and Statistics features
 
 ---
 
-### Contributions to Team-Based Tasks
-- Reviewed pull requests and provided feedback on code quality and documentation.
-- Resolved merge conflicts between branches.
-- Fixed checkstyle issues and improved code quality.
-- Performed manual testing and text-ui testing.
+### Contributions to team-based tasks
+
+- Integrated features into the main codebase
+- Ensured consistency in validation and error handling
 
 ---
 
-### Review / Mentoring Contributions
-- Reviewed teammates’ pull requests and suggested improvements.
+### Review / mentoring contributions
 
+- Reviewed teammates’ PRs and provided feedback on code quality and correctness
+
+---
+
+### Contributions beyond the project team
+
+- Reported bugs during PE-D with clear reproduction steps and severity classification
 ---
 
 ### Tools Used
