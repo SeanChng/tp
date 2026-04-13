@@ -1,0 +1,61 @@
+@startuml
+
+actor User
+participant ":Ui" as Ui
+participant ":Parser" as Parser
+participant ":FilterCommand" as FilterCommand
+participant ":TransactionList" as TransactionList
+
+User -> Ui : "filter from/2026-01-01 to/2026-02-01"
+activate Ui
+
+Ui -> Parser : parse("filter from/2026-01-01 to/2026-02-01")
+activate Parser
+
+create FilterCommand
+Parser -> FilterCommand : FilterCommand(from, to)
+activate FilterCommand
+FilterCommand --> Parser
+deactivate FilterCommand
+
+Parser --> Ui
+deactivate Parser
+
+Ui -> FilterCommand : execute(list, budget, ui)
+activate FilterCommand
+
+loop for each index i in list
+    FilterCommand -> TransactionList : get(i)
+    activate TransactionList
+    TransactionList --> FilterCommand
+    deactivate TransactionList
+
+    note right of FilterCommand: Checks if transaction date is\nwithin inclusive range [from, to]
+end
+
+alt matched.size() > 0
+    FilterCommand -> Ui : showMessage("Found N transaction(s)...")
+    activate Ui #lightgrey
+    note right: Displays count and date range
+    Ui --> FilterCommand
+    deactivate Ui
+
+    loop for each matched entry
+        FilterCommand -> Ui : showMessage(entry)
+        activate Ui #lightgrey
+        note right: Displays each matching\ntransaction with original index
+        Ui --> FilterCommand
+        deactivate Ui
+    end
+else no matches found
+    FilterCommand -> Ui : showMessage("No matching transactions found...")
+    activate Ui #lightgrey
+    Ui --> FilterCommand
+    deactivate Ui
+end
+
+FilterCommand --> Ui
+deactivate FilterCommand
+deactivate Ui
+
+@enduml
